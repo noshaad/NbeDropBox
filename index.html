@@ -1,0 +1,101 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+    <title>Nbe Drop Box</title>
+	
+	<style>
+	
+.nbe-drop-box {
+    display: flex;
+    width: 100%;
+    background: white;
+    height: 200px;
+    border: 2px dashed #e3e3e3;
+    border-radius: 40px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.nbe-drop-box input{
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+input#submoit {
+    display: flex;
+    margin: 40px auto;
+}
+#empty-upload {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 9999;
+    cursor: pointer;
+}
+
+	</style>
+</head>
+<body>
+
+<form enctype="multipart/form-data">
+		<div class="nbe-drop-box">
+                <p>برای آپلود فایل مورد نظر را در محیط بیاندازید یا بر روی محیط کیلیک کنید  </p>
+                <input name="upload_image[]" type="file" id="upload-media" multiple>
+                <div class="images-placeholder"></div>
+		</div>
+</form>
+
+
+<script>
+$(document).ready(function(){
+ var imagesPreview = function(input, placeToInsertImagePreview) {
+
+        if (input.files) {
+
+            var filesAmount = input.files.length;
+            for (i = 0; i < filesAmount; i++) {
+
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    console.log(event.target.result)
+                    $(`<img style="width: 100px;margin: 10px" src="${event.target.result}" />`).appendTo(placeToInsertImagePreview);
+                }
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#upload-media').on('change', function() {
+        var self = $(this);
+        imagesPreview(this, '.images-placeholder');
+        $(".nbe-drop-box p").hide()
+        $(".nbe-drop-box").append('<span class="btn" id="empty-upload">پاک کردن</span>')
+        $("#empty-upload").click(function (){
+            $(this).remove();
+            document.getElementById('upload-media').value = "";
+            $('.images-placeholder').html(" ")
+            $(".nbe-drop-box p").show()
+        })
+    });
+})
+
+</script>
+</body>
+</html>
